@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Friends Forever Change Request</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <h1>Friends Forever Change Request</h1>
+
+    <!-- เลือกยศ -->
+    <section class="panel" id="session-panel">
+      <div class="row">
+        <label for="current-member">กำลังทำหน้าที่เป็นสมาชิก:</label>
+        <select id="current-member"></select>
+      </div>
+      <p id="acting-as"></p>
+    </section>
+    <div id="message-box" class="msg" aria-live="polite"></div>
+
+    <!-- ตารางสมาชิก -->
+    <section id="members-section">
+      <h2>รายชื่อสมาชิก</h2>
+      <table border="1" cellpadding="6" cellspacing="0">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>ชื่อ</th>
+            <th>บทบาทปัจจุบัน</th>
+            <th>สถานะ</th>
+          </tr>
+        </thead>
+        <tbody id="members-body"></tbody>
+      </table>
+    </section>
+
+    <!-- ฟอร์มสร้างคำขอ -->
+    <section class="panel" id="create-panel">
+      <h2>สร้างคำขอเปลี่ยนบทบาท</h2>
+      <form id="create-request-form">
+        <div class="row">
+          <label for="proposer">ผู้สร้างคำขอ :</label>
+          <select id="proposer" required></select>
+        </div>
+        <div class="row">
+          <label for="target">สมาชิกเป้าหมาย :</label>
+          <select id="target" required></select>
+        </div>
+        <div class="row">
+          <label for="new-role">บทบาทใหม่ :</label>
+          <select id="new-role" required>
+            <option value="PRODUCER">PRODUCER</option>
+            <option value="FINANCE">FINANCE</option>
+            <option value="EDITOR">EDITOR</option>
+            <option value="CREATOR">CREATOR</option>
+          </select>
+        </div>
+        <button type="submit">สร้างคำขอ</button>
+      </form>
+    </section>
+
+    <!-- R1 + R3 + R5: รายการคำขอ (โครงตารางอยู่ใน HTML) -->
+    <section id="requests-section">
+      <h2>รายการคำขอเปลี่ยนบทบาท</h2>
+      <table border="1" cellpadding="6" cellspacing="0">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>ผู้สร้างคำขอ</th>
+            <th>เป้าหมาย</th>
+            <th>บทบาทใหม่</th>
+            <th>สถานะ</th>
+            <th>อนุมัติ</th>
+            <th>ไม่อนุมัติ</th>
+            <th>การดำเนินการ</th>
+          </tr>
+        </thead>
+        <tbody id="requests-body"></tbody>
+      </table>
+    </section>
+
+    <section id="request-detail">
+      <h2>รายละเอียดคำขอ <span id="detail-id"></span></h2>
+      <p id="detail-empty">เลือกคำขอจากตารางเพื่อดูรายละเอียด</p>
+      <div id="detail-content" hidden>
+        <ul>
+          <li>ผู้สร้างคำขอ: <span id="detail-proposer"></span></li>
+          <li>เป้าหมาย: <span id="detail-target"></span></li>
+          <li>บทบาทใหม่ที่ขอ: <span id="detail-new-role"></span></li>
+          <li>สถานะ: <span id="detail-status"></span></li>
+          <li>โหวต: อนุมัติ <span id="detail-approve-count"></span> / ไม่อนุมัติ <span id="detail-reject-count"></span></li>
+        </ul>
+        <h3>รายการโหวต</h3>
+        <p id="detail-votes-empty">ยังไม่มีใครโหวต</p>
+        <table id="detail-votes-table" border="1" cellpadding="6" cellspacing="0" hidden>
+          <thead>
+            <tr>
+              <th>สมาชิก</th>
+              <th>ผลโหวต</th>
+            </tr>
+          </thead>
+          <tbody id="detail-votes-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- สรุปผลแต่ละสถานะ -->
+    <section id="summary">
+      <h2>สรุปผลคำขอแต่ละสถานะ</h2>
+
+      <div class="summary-group" data-status="PENDING">
+        <h3>PENDING (<span class="summary-count">0</span>)</h3>
+        <p class="summary-empty">ไม่มี</p>
+        <table class="summary-table" border="1" cellpadding="6" cellspacing="0" hidden>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>ผู้สร้างคำขอ</th>
+              <th>เป้าหมาย</th>
+              <th>บทบาทใหม่</th>
+              <th>อนุมัติ</th>
+              <th>ไม่อนุมัติ</th>
+              <th>บทบาทปัจจุบัน (ผู้สร้างคำขอ)</th>
+              <th>บทบาทปัจจุบัน (เป้าหมาย)</th>
+            </tr>
+          </thead>
+          <tbody class="summary-body"></tbody>
+        </table>
+      </div>
+
+      <div class="summary-group" data-status="APPROVED">
+        <h3>อนุมัติ (<span class="summary-count">0</span>)</h3>
+        <p class="summary-empty">ไม่มี</p>
+        <table class="summary-table" border="1" cellpadding="6" cellspacing="0" hidden>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>ผู้สร้างคำขอ</th>
+              <th>เป้าหมาย</th>
+              <th>บทบาทใหม่</th>
+              <th>อนุมัติ</th>
+              <th>ไม่อนุมัติ</th>
+              <th>บทบาทปัจจุบัน (ผู้สร้างคำขอ)</th>
+              <th>บทบาทปัจจุบัน (เป้าหมาย)</th>
+            </tr>
+          </thead>
+          <tbody class="summary-body"></tbody>
+        </table>
+      </div>
+
+      <div class="summary-group" data-status="REJECTED">
+        <h3>REJECTED (<span class="summary-count">0</span>)</h3>
+        <p class="summary-empty">ไม่มี</p>
+        <table class="summary-table" border="1" cellpadding="6" cellspacing="0" hidden>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>ผู้สร้างคำขอ</th>
+              <th>เป้าหมาย</th>
+              <th>บทบาทใหม่</th>
+              <th>อนุมัติ</th>
+              <th>ไม่อนุมัติ</th>
+              <th>บทบาทปัจจุบัน (ผู้สร้างคำขอ)</th>
+              <th>บทบาทปัจจุบัน (เป้าหมาย)</th>
+            </tr>
+          </thead>
+          <tbody class="summary-body"></tbody>
+        </table>
+      </div>
+
+      <div class="summary-group" data-status="CANCELLED">
+        <h3>CANCELLED (<span class="summary-count">0</span>)</h3>
+        <p class="summary-empty">ไม่มี</p>
+        <table class="summary-table" border="1" cellpadding="6" cellspacing="0" hidden>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>ผู้สร้างคำขอ</th>
+              <th>เป้าหมาย</th>
+              <th>บทบาทใหม่</th>
+              <th>อนุมัติ</th>
+              <th>ไม่อนุมัติ</th>
+              <th>บทบาทปัจจุบัน (ผู้สร้างคำขอ)</th>
+              <th>บทบาทปัจจุบัน (เป้าหมาย)</th>
+            </tr>
+          </thead>
+          <tbody class="summary-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <script src="models/member.js"></script>
+    <script src="models/changeRequest.js"></script>
+    <script src="views/memberView.js"></script>
+    <script src="views/requestView.js"></script>
+    <script src="controllers/appController.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
