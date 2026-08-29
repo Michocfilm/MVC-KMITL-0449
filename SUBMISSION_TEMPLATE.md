@@ -3,18 +3,19 @@
 ## 1. วิธีเปิดโปรแกรม
 - ภาษา/เฟรมเวิร์ก: JavaScript (HTML + Vanilla)
 - Entry point / คำสั่งเปิดโปรแกรม:
-  1. เปิดโฟลเดอร์โปรเจกต์ใน terminal แล้วรัน python -m http.server 8080
-  2. เปิดเบราว์เซอร์ที่ http://localhost:8080
+  1. เปิดโฟลเดอร์โปรเจกต์ใน terminal แล้วรัน python -m http.server 3000
+  2. เปิดเบราว์เซอร์ที่ http://localhost:3000
 
 ## 2. ตารางเชื่อมโยง Requirements
 
 | Requirement | Model / Domain | Controller / Action | View / Screen |
 |---|---|---|---|
-| R1 แสดงผล | Member, ChangeRequest | AppController.refresh() | index.html + MemberView.renderTable , RequestView.renderList |
-| R2 สร้างคำขอเปลี่ยนบทบาท | ChangeRequestStore.create() | AppController.createRequest() | index.html |
-| R3 โหวต | ChangeRequest.addVote(), Member.isActive() | AppController.vote() | RequestView.renderList |
-| R4 สรุปผลและเปลี่ยนบทบาท | ChangeRequest.addVote() + Member.changeRole() | AppController.vote() | RequestView.renderDetail |
-| R5 ยกเลิก + สรุปตามสถานะ + แจ้ง error | ChangeRequest.cancel() , ChangeRequestStore.groupByStatus() | AppController.cancelRequest(), refresh() | RequestView.renderSummary, RequestView.showMessage |
+| R1 แสดงผล| index.html | | |
+| R2 สร้างคำขอเปลี่ยนบทบาท| | | |
+| R3 โหวต| | | |
+| R4 สรุปผลและเปลี่ยนบทบาท| | | |
+| R5 ยกเลิก + สรุปตามสถานะ + แจ้ง error| | | |
+
 
 ## 3. ผลการทดสอบ
 
